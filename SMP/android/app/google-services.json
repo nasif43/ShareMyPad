@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "526555355355",
+    "project_id": "sharemypad-303220",
+    "storage_bucket": "sharemypad-303220.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:526555355355:android:b8559c906227ddd377d4fe",
+        "android_client_info": {
+          "package_name": "com.squareone.smp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "526555355355-rln7sqem8qqfj1fu1fs29pp6oolb2p85.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.squareone.smp",
+            "certificate_hash": "50a420ac647f4889618f99642f8df2877b5590e1"
+          }
+        },
+        {
+          "client_id": "526555355355-pk4mqiag1h7clhnvq5o1dq17jcf3mrs2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdNq1idC6kBKMTLoDMYRjefvbZys0UF9s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "526555355355-pk4mqiag1h7clhnvq5o1dq17jcf3mrs2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
