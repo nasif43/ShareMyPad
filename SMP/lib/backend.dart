@@ -1,94 +1,105 @@
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'dart:async';
 // import 'package:geocoder/geocoder.dart';
 import 'package:flutter/material.dart';
-
+import 'user_location.dart';
+import 'package:provider/provider.dart';
 // import 'homepage.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:geoflutterfire/geoflutterfire.dart';
 // import 'package:geolocator/geolocator.dart';
 
-Location location = new Location();
+// Location location = new Location();
 
-locationData() async {
-  bool _serviceEnabled = await location.serviceEnabled();
-  if (!_serviceEnabled) {
-    _serviceEnabled = await location.requestService();
-    if (!_serviceEnabled) {
-      return;
-    }
-  }
+// locationData() async {
+//   bool _serviceEnabled = await location.serviceEnabled();
+//   if (!_serviceEnabled) {
+//     _serviceEnabled = await location.requestService();
+//     if (!_serviceEnabled) {
+//       return;
+//     }
+//   }
 
-  PermissionStatus _permissionGranted = await location.hasPermission();
-  if (_permissionGranted == PermissionStatus.denied) {
-    _permissionGranted = await location.requestPermission();
-    if (_permissionGranted != PermissionStatus.granted) {
-      return;
-    }
-  }
-  location.onLocationChanged.listen((LocationData currentLocation) {
-    // Use current location
-  });
-}
+//   PermissionStatus _permissionGranted = await location.hasPermission();
+//   if (_permissionGranted == PermissionStatus.denied) {
+//     _permissionGranted = await location.requestPermission();
+//     if (_permissionGranted != PermissionStatus.granted) {
+//       return;
+//     }
+//   }
+// }
 
-class MapWidget extends StatelessWidget {
+class MapLocate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MapSample(),
-    );
+    var userLocation = Provider.of<UserLocation>(context);
+    return Center(child: Text('Lat:${userLocation.latitude}'));
   }
 }
 
-class MapSample extends StatefulWidget {
-  @override
-  _MapSampleState createState() => _MapSampleState();
-}
+class LocationService {
+  UserLocation _currentLocation;
 
-class _MapSampleState extends State<MapSample> {
-  Completer<GoogleMapController> _controller = Completer();
-  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
-  void getMarkers(double lat, double long) {
-    MarkerId markerId = MarkerId(lat.toString() + long.toString());
-    Marker _marker = Marker(
-        markerId: markerId,
-        position: LatLng(lat, long),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
-        infoWindow: InfoWindow(snippet: 'Address'));
-    setState(() {
-      markers[markerId] = _marker;
+  Location location = Location();
+  StreamController<UserLocation> _locationController =
+      StreamController<UserLocation>.broadcast();
+
+  LocationService() {
+    // Request permission to use location
+    location.requestPermission().then((granted) {
+      if (true) {
+        location.onLocationChanged.listen((locationData) {
+          if (locationData != null) {
+            _locationController.add(UserLocation(
+              latitude: locationData.latitude,
+              longitude: locationData.longitude,
+            ));
+          }
+        });
+      }
     });
   }
 
+  Stream<UserLocation> get locationStream => _locationController.stream;
+
+  Future<UserLocation> getLocation() async {
+    try {
+      var userLocation = await location.getLocation();
+      _currentLocation = UserLocation(
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
+      );
+    } on Exception catch (e) {
+      print('Could not get location: ${e.toString()}');
+    }
+
+    return _currentLocation;
+  }
+}
+
+class Bui extends StatelessWidget {
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      body: GoogleMap(
-        onTap: (tapped) {
-          getMarkers(tapped.latitude, tapped.longitude);
-        },
-        mapType: MapType.hybrid,
-        compassEnabled: true,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-        initialCameraPosition: CameraPosition(target: LatLng(-90, 90)),
-        markers: Set<Marker>.of(markers.values),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        label: Text('To the lake!'),
-        icon: Icon(Icons.directions_boat),
-      ),
+    return StreamProvider<UserLocation>(
+      create: (context) => LocationService().locationStream,
+      child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: Scaffold(
+            body: MapLocate(),
+          )),
     );
   }
+}
+
 /*
   Future<void> _goToTheLake() async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition());*/
-}
 
 // void getCurrentLocation () async{
 //   Position currentPosition = await GeolocatorPlatform.instance.getCurrentPosition();

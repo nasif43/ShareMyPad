@@ -32,6 +32,12 @@ import 'package:flutter/material.dart';
 //     // Use current location
 //   });
 // }
+class Mappp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(child: MapLocate());
+  }
+}
 
 class MapLocate extends StatefulWidget {
   @override

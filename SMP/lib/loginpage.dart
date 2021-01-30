@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     (user) => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => MapLocate()),
+                        MaterialPageRoute(builder: (context) => Mappp()),
                       )
                     },
                   );
