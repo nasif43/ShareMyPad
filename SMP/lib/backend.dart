@@ -1,14 +1,9 @@
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'dart:async';
-// import 'package:geocoder/geocoder.dart';
 import 'package:flutter/material.dart';
+import 'package:smp/firestore.dart';
 import 'user_location.dart';
 import 'package:provider/provider.dart';
-// import 'homepage.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:geoflutterfire/geoflutterfire.dart';
-// import 'package:geolocator/geolocator.dart';
 
 // Location location = new Location();
 
@@ -29,12 +24,40 @@ import 'package:provider/provider.dart';
 //     }
 //   }
 // }
+class Bui extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return StreamProvider<UserLocation>(
+      create: (context) => LocationService().locationStream,
+      child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: Scaffold(
+            body: ManMan(),
+          )),
+    );
+  }
+}
 
 class MapLocate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var userLocation = Provider.of<UserLocation>(context);
     return Center(child: Text('Lat:${userLocation.latitude}'));
+  }
+}
+
+class ManMan extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var userLocation = Provider.of<UserLocation>(context);
+    return Scaffold(
+      body:
+          Database('', '${userLocation.latitude}', '${userLocation.longitude}'),
+    );
   }
 }
 
@@ -78,53 +101,20 @@ class LocationService {
   }
 }
 
-class Bui extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return StreamProvider<UserLocation>(
-      create: (context) => LocationService().locationStream,
-      child: MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
-          home: Scaffold(
-            body: MapLocate(),
-          )),
-    );
-  }
-}
-
-/*
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition());*/
-
-// void getCurrentLocation () async{
-//   Position currentPosition = await GeolocatorPlatform.instance.getCurrentPosition();
+// class Bui extends StatelessWidget {
+//   // This widget is the root of your application.
+//   @override
+//   Widget build(BuildContext context) {
+//     return StreamProvider<UserLocation>(
+//       create: (context) => LocationService().locationStream,
+//       child: MaterialApp(
+//           title: 'Flutter Demo',
+//           theme: ThemeData(
+//             primarySwatch: Colors.blue,
+//           ),
+//           home: Scaffold(
+//             body: MapLocate(),
+//           )),
+//     );
 //   }
-// @override
-// void initState(){
-//   super.initState();
-//   getCurrentLocation();
-// }
-
-// //on tapped
-// final coordinated
-// getMarkers(tapped.latitude, tapped.longitude);
-// await FirebaseFirestore.instance.collection('location').add{
-//   'latitude': tapped.latitude,
-//   'longitude': tapped.longitude,
-//   'Address': tapped
-// }
-
-// Location location = new Location();
-
-// Firestore firestore = Firestore.instance;
-// Geoflutterfire geo = Geoflutterfire();
-
-// locationData() async {
-//   var pos = await location.getLocation();
-//   var locationdata = LatLng(pos.latitude, pos.latitude);
 // }

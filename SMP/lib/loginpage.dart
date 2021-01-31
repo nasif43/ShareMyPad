@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:smp/backend.dart';
+
+// import 'package:smp/firestore.dart';
 import 'auth.dart';
-// import 'backend.dart';
-import 'suck.dart';
+// import 'suck.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -66,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     (user) => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Mappp()),
+                        MaterialPageRoute(builder: (context) => Bui()),
                       )
                     },
                   );
